@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->append($this->getServiceNode())
+            ->append($this->getManagerNode())
             ->end();
 
         return $treeBuilder;
@@ -50,6 +51,20 @@ class Configuration implements ConfigurationInterface
 
             ->end()
             ;
+
+        return $node;
+    }
+
+    private function getManagerNode(): ArrayNodeDefinition
+    {
+        $treeBuilder = new TreeBuilder('manager');
+        $node = $treeBuilder->getRootNode();
+
+        $node
+            ->children()
+                ->scalarNode('entity')->cannotBeEmpty()->isRequired()->end()
+            ->end()
+        ;
 
         return $node;
     }
