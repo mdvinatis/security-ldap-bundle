@@ -1,0 +1,24 @@
+{
+  "name": "vinatis/security-ldap-bundle",
+  "description": "Security LDAP provider",
+  "type": "symfony-bundle",
+  "require": {
+    "php": ">=8.0",
+    "symfony/framework-bundle": "^5.2",
+    "symfony/security-bundle": "5.2.*",
+    "symfony/ldap": "5.2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Vinatis\\Bundle\\SecurityLdapBundle\\": "src",
+      "VinatisSecurityLdapTests\\": "tests"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michel Dourneau",
+      "email": "mdourneau@vinaits.com"
+    }
+  ]
+}

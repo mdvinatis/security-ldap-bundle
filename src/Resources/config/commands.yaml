@@ -1,0 +1,5 @@
+services:
+
+  Vinatis\Bundle\SecurityLdapBundle\Command\TestCommand:
+    tags:
+      - { name: 'console.command', command: 'vinatis:security:ldap:test' }
