@@ -38,6 +38,11 @@ final class VinatisSecurityLdapExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container
+            ->register(Ldap::class, Ldap::class)
+            ->addTag('ldap');
+        ;
+
+        $container
             ->register(ActiveDirectory::class, ActiveDirectory::class)
             ->setArguments([
                 $container->getDefinition(Ldap::class),
@@ -76,11 +81,6 @@ final class VinatisSecurityLdapExtension extends Extension
             //    $container->getDefinition(EntityManagerInterface::class),
             //    $container->getDefinition(RefreshTokenManagerInterface::class),
             //])
-        ;
-
-        $container
-            ->register(Ldap::class, Ldap::class)
-            ->addTag('ldap');
         ;
     }
 }

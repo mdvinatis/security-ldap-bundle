@@ -17,7 +17,8 @@
     "symfony/framework-bundle": "5.2.*",
     "symfony/ldap": "5.2.*",
     "symfony/security-bundle": "5.2.*",
-    "symfony/yaml": "5.2.*"
+    "symfony/yaml": "5.2.*",
+    "symfony/uid": "5.2.*"
   },
   "autoload": {
     "psr-4": {
