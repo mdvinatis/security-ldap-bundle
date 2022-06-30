@@ -43,6 +43,10 @@ final class VinatisSecurityLdapExtension extends Extension
         ;
 
         $container
+            ->register(EncoderStrategyInterface::class, EncoderStrategyInterface::class)
+        ;
+
+        $container
             ->register(ActiveDirectory::class, ActiveDirectory::class)
             ->setArguments([
                 $container->getDefinition(Ldap::class),
