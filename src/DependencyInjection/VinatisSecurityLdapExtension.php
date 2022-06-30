@@ -2,19 +2,16 @@
 
 namespace Vinatis\Bundle\SecurityLdapBundle\DependencyInjection;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Authenticator\LdapAuthenticator;
+use Vinatis\Bundle\SecurityLdapBundle\Encoder\EncoderStrategyInterface;
 use Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager;
 use Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class VinatisSecurityLdapExtension.
@@ -43,6 +40,9 @@ final class VinatisSecurityLdapExtension extends Extension
         $container
             ->register(ActiveDirectory::class, ActiveDirectory::class)
             ->setArguments([
+                $container->getDefinition(Ldap::class),
+                $container->getDefinition(EncoderStrategyInterface::class),
+                $container->getDefinition(Adapter::class),
                 $config['service']['dn'],
                 $config['service']['user'],
                 $config['service']['password']
