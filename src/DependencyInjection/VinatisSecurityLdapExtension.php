@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Authenticator\LdapAuthenticator;
 use Vinatis\Bundle\SecurityLdapBundle\Encoder\EncoderStrategyInterface;
+use Vinatis\Bundle\SecurityLdapBundle\Encoder\ShaEncoderStrategy;
 use Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager;
 use Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory;
 use Symfony\Component\Ldap\Ldap;
@@ -38,53 +39,37 @@ final class VinatisSecurityLdapExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container
-            ->register(Ldap::class, Ldap::class)
-            ->addTag('ldap');
+            ->register(Adapter::class, Adapter::class)
+            ->setArguments([
+                [
+                    'host' => $config['service']['host'],
+                    'port' => $config['service']['port'],
+                    'options' => $config['service']['options']
+                ]
+            ])
         ;
 
         $container
-            ->register(EncoderStrategyInterface::class, EncoderStrategyInterface::class)
+            ->register(Ldap::class, Ldap::class)
+            ->setArguments([$container->getDefinition(Adapter::class)])
+            ->addTag('ldap')
         ;
+
+        $container->register(EncoderStrategyInterface::class, ShaEncoderStrategy::class);
 
         $container
             ->register(ActiveDirectory::class, ActiveDirectory::class)
             ->setArguments([
-                $container->getDefinition(Ldap::class),
-                $container->getDefinition(EncoderStrategyInterface::class),
                 $container->getDefinition(Adapter::class),
+                $container->getDefinition(EncoderStrategyInterface::class),
                 $config['service']['dn'],
                 $config['service']['user'],
                 $config['service']['password']
             ])
         ;
 
-        $container
-            ->register(Adapter::class, Adapter::class)
-            ->setArguments([
-                $config['service']['host'],
-                $config['service']['port'],
-                $config['service']['options']
-            ])
-        ;
+        $container->register(UserLdapManager::class, UserLdapManager::class);
 
-        $container
-            ->register(UserLdapManager::class, UserLdapManager::class)
-            //->setArguments([
-            //    $container->getDefinition(ActiveDirectory::class),
-            //    $container->getDefinition(UserPasswordEncoderInterface::class),
-            //    $config['manager']['entity']
-            //])
-        ;
-
-        $container
-            ->register(LdapAuthenticator::class, LdapAuthenticator::class)
-            //->setArguments([
-            //    $container->getDefinition(UserLdapManager::class),
-            //    $container->getDefinition(ActiveDirectory::class),
-            //    $container->getDefinition(JWTEncoderInterface::class),
-            //    $container->getDefinition(EntityManagerInterface::class),
-            //    $container->getDefinition(RefreshTokenManagerInterface::class),
-            //])
-        ;
+        $container->register(LdapAuthenticator::class, LdapAuthenticator::class);
     }
 }
