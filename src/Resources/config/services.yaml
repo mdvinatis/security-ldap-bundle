@@ -2,8 +2,8 @@ services:
 
   Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Authenticator\LdapAuthenticator:
     arguments:
-      '@Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager'
-      '@Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory'
-      '@Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface'
-      '@Doctrine\ORM\EntityManagerInterface'
-      '@Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface'
+      - '@Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager'
+      - '@Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory'
+      - '@Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface'
+      - '@Doctrine\ORM\EntityManagerInterface'
+      - '@Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface'
