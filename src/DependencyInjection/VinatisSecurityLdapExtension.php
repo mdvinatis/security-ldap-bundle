@@ -6,14 +6,13 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Vinatis\Bundle\SecurityLdapBundle\Encoder\EncoderStrategyInterface;
 use Vinatis\Bundle\SecurityLdapBundle\Encoder\ShaEncoderStrategy;
-use Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager;
 use Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
 use Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Core\User\UserChecker;
+use Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Core\Encoder\PrestashopLegacyEncoder;
 
 /**
  * Class VinatisSecurityLdapExtension.
@@ -73,6 +72,13 @@ final class VinatisSecurityLdapExtension extends Extension
                 $config['service']['dn'],
                 $config['service']['user'],
                 $config['service']['password']
+            ])
+        ;
+
+        $container
+            ->register(PrestashopLegacyEncoder::class, PrestashopLegacyEncoder::class)
+            ->setArguments([
+                $config['legacy']['cookie_key']
             ])
         ;
     }

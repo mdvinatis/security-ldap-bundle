@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
             ->append($this->getServiceNode())
             ->append($this->getAccessNode())
             ->append($this->getEntityNode())
+            ->append($this->getLegacyNode())
             ->end();
 
         return $treeBuilder;
@@ -78,6 +79,20 @@ class Configuration implements ConfigurationInterface
         $node
             ->children()
             ->scalarNode('role')->cannotBeEmpty()->isRequired()->end()
+            ->end()
+        ;
+
+        return $node;
+    }
+
+    private function getLegacyNode(): ArrayNodeDefinition
+    {
+        $treeBuilder = new TreeBuilder('legacy');
+        $node = $treeBuilder->getRootNode();
+
+        $node
+            ->children()
+            ->scalarNode('cookie_key')->defaultNull()->defaultValue(null)->end()
             ->end()
         ;
 

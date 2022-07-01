@@ -6,9 +6,9 @@ use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 final class PrestashopLegacyEncoder implements PasswordEncoderInterface
 {
-    private string $prestashopCookieKey;
+    private ?string $prestashopCookieKey = null;
 
-    public function __construct(string $prestashopCookieKey)
+    public function __construct(?string $prestashopCookieKey = null)
     {
         $this->prestashopCookieKey = $prestashopCookieKey;
     }
