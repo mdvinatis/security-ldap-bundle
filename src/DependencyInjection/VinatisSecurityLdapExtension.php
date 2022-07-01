@@ -6,13 +6,13 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Authenticator\LdapAuthenticator;
 use Vinatis\Bundle\SecurityLdapBundle\Encoder\EncoderStrategyInterface;
 use Vinatis\Bundle\SecurityLdapBundle\Encoder\ShaEncoderStrategy;
 use Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager;
 use Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
+use Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Core\User\UserChecker;
 
 /**
  * Class VinatisSecurityLdapExtension.
@@ -37,6 +37,11 @@ final class VinatisSecurityLdapExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        $container
+            ->register(UserChecker::class, UserChecker::class)
+            ->setArguments([$config['access']['role']])
+        ;
 
         $container
             ->register(Adapter::class, Adapter::class)
@@ -69,7 +74,5 @@ final class VinatisSecurityLdapExtension extends Extension
         ;
 
         $container->register(UserLdapManager::class, UserLdapManager::class);
-
-        $container->register(LdapAuthenticator::class, LdapAuthenticator::class);
     }
 }
