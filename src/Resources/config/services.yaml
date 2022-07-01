@@ -1,5 +1,11 @@
 services:
 
+  Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager:
+    arguments:
+      - '@Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory'
+      - '@security.password_encoder'
+      - '%vinatis_security_ldab.entity.class%'
+
   Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Authenticator\LdapAuthenticator:
     arguments:
       - '@Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager'
@@ -7,9 +13,3 @@ services:
       - '@Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface'
       - '@Doctrine\ORM\EntityManagerInterface'
       - '@Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface'
-
-  Vinatis\Bundle\SecurityLdapBundle\Manager:
-    arguments:
-      - '@Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory'
-      - '@Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface'
-      - '%vinatis_security_ldab.entity.class%'
