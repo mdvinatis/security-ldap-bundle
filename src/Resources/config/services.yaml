@@ -7,3 +7,9 @@ services:
       - '@Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface'
       - '@Doctrine\ORM\EntityManagerInterface'
       - '@Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface'
+
+  Vinatis\Bundle\SecurityLdapBundle\Manager:
+    arguments:
+      - '@Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory'
+      - '@Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface'
+      - '%vinatis_security_ldab.entity.class%'

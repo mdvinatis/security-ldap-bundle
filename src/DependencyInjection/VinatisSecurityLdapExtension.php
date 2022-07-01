@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Vinatis\Bundle\SecurityLdapBundle\Encoder\EncoderStrategyInterface;
 use Vinatis\Bundle\SecurityLdapBundle\Encoder\ShaEncoderStrategy;
-use Vinatis\Bundle\SecurityLdapBundle\Manager\UserLdapManager;
 use Vinatis\Bundle\SecurityLdapBundle\Service\ActiveDirectory;
 use Symfony\Component\Ldap\Ldap;
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
@@ -37,6 +36,8 @@ final class VinatisSecurityLdapExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('vinatis_security_ldab.entity.class', $config['entity']['class']);
 
         $container
             ->register(UserChecker::class, UserChecker::class)
@@ -72,7 +73,5 @@ final class VinatisSecurityLdapExtension extends Extension
                 $config['service']['password']
             ])
         ;
-
-        $container->register(UserLdapManager::class, UserLdapManager::class);
     }
 }
