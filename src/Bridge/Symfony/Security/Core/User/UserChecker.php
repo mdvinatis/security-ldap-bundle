@@ -2,8 +2,8 @@
 
 namespace Vinatis\Bundle\SecurityLdapBundle\Bridge\Symfony\Security\Core\User;
 
-use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Exception\AccountExpiredException;
+use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Vinatis\Bundle\SecurityLdapBundle\Model\UserLdapInterface;
@@ -24,7 +24,9 @@ final class UserChecker implements UserCheckerInterface
         }
 
         if ($user->isDeleted()) {
-            throw new AccountExpiredException('Your account has deleted');
+            $ex =  new AccountExpiredException('Your account has deleted');
+            $ex->setUser($user);
+            throw $ex;
         }
     }
 
@@ -35,13 +37,15 @@ final class UserChecker implements UserCheckerInterface
         }
 
         if ($user->isExpired()) {
-            throw new AccountExpiredException('Your account has expired');
+            $ex =  new AccountExpiredException('Your account has expired');
+            $ex->setUser($user);
+            throw $ex;
         }
 
         if (!in_array($this->appAccessApplication, $user->getRoles())) {
-            throw new UserNotFoundException($user->getEmail(),
-                sprintf('You do not have rights to access the application. ROLE %s required', $this->appAccessApplication)
-            );
+            $ex = new CredentialsExpiredException(sprintf('You do not have rights to access the application. ROLE %s required', $this->appAccessApplication));
+            $ex->setUser($user);
+            throw $ex;
         }
     }
 }
